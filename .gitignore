@@ -5,3 +5,4 @@ dist
 .publish
 package-lock.json
 .vscode
+publish
