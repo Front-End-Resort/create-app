@@ -3,7 +3,9 @@ import {
   ILWithBQ,
   BLWithBQ,
   HistoryWithBFOL,
-  LocationTypeMap
+  LocationTypeMap,
+  BLWithQuery,
+  ILWithQuery
 } from 'create-history'
 import {
   Context,
@@ -22,7 +24,7 @@ import {
 export interface ClientController extends Controller {
   location: HistoryLocation
   context: Context
-  history: History<BLWithBQ, ILWithBQ>
+  history: History<BLWithBQ, ILWithBQ> | History<BLWithQuery, ILWithQuery>
   matcher: Matcher
   loader: Loader
   routes: Route[]
@@ -40,7 +42,7 @@ interface CreateApp {
 }
 
 interface Render {
-  (targetPath: string | ILWithBQ): any
+  (targetPath: string | ILWithBQ | ILWithQuery): any
 }
 
 interface Stop {
@@ -59,14 +61,20 @@ interface Stop {
 }
 
 interface Publish {
-  (location: ILWithBQ): void
+  (location: ILWithBQ | ILWithQuery): void
 }
 
 interface App {
   start: Start
   stop: Stop
   render: Render
-  history: History
+  history: HistoryWithBFOL<
+      LocationTypeMap['BQ']['Base'],
+      LocationTypeMap['BQ']['Intact']
+    > | HistoryWithBFOL<
+      LocationTypeMap['QUERY']['Base'],
+      LocationTypeMap['QUERY']['Intact']
+    >
   subscribe: Subscribe
 }
 
@@ -104,5 +112,8 @@ export interface CreateHistoryInCA {
   (setting?: Settings): HistoryWithBFOL<
     LocationTypeMap['BQ']['Base'],
     LocationTypeMap['BQ']['Intact']
+  > | HistoryWithBFOL<
+    LocationTypeMap['QUERY']['Base'],
+    LocationTypeMap['QUERY']['Intact']
   >
 }

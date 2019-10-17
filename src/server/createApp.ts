@@ -125,7 +125,7 @@ const createApp: CreateApp = (settings) => {
   }
 
   const fetchController: FetchController = (requestPath, injectContext) => {
-    let location: ILWithBQ = history.createLocation(requestPath)
+    let location = history.createLocation(requestPath)
     let matches = matcher(location.pathname)
 
     if (!matches) {
@@ -139,7 +139,8 @@ const createApp: CreateApp = (settings) => {
     let finalLocation: HistoryLocation = Object.assign({
       pattern: path,
       params,
-      raw: location.pathname + location.search
+      raw: location.pathname + location.search,
+      basename: ''
     }, location)
 
     let finalContext: Context = {

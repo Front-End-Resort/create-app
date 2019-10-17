@@ -8,6 +8,8 @@ import CreateHistoryMap, {
   CreateHistory,
   ILWithBQ,
   History,
+  ILWithQuery,
+  BLWithQuery,
   BLWithBQ
 } from 'create-history'
 import defaultViewEngine from './viewEngine'
@@ -117,7 +119,7 @@ const createApp: CreateApp = (settings) => {
   }
 
   const render: Render = (targetPath) => {
-    let location: ILWithBQ = typeof targetPath === 'string'
+    let location = typeof targetPath === 'string'
       ? history.createLocation(targetPath)
       : targetPath
 
@@ -134,7 +136,8 @@ const createApp: CreateApp = (settings) => {
     let finalLocation: HistoryLocation = Object.assign({
       pattern: path,
       params,
-      raw: location.pathname + location.search
+      raw: location.pathname + location.search,
+      basename: ''
     }, location)
 
     currentLocation = finalLocation
@@ -161,7 +164,7 @@ const createApp: CreateApp = (settings) => {
     class WrapperController extends IController {
       location: HistoryLocation
       context: Context
-      history: History<BLWithBQ, ILWithBQ>
+      history: History<BLWithQuery, ILWithQuery> | History<BLWithBQ, ILWithBQ>
       matcher: Matcher
       loader: Loader
       routes: Route[]
@@ -303,7 +306,7 @@ const createApp: CreateApp = (settings) => {
   }
 
   const start: Start = (callback, shouldRenderWithCurrentLocation) => {
-    let listener: (location: ILWithBQ) => void = location => {
+    let listener: (location: ILWithBQ | ILWithQuery) => void = location => {
       let result = render(location)
       if (Promise.resolve(result) == result) {
         result.then(() => {

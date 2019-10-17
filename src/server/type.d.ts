@@ -25,7 +25,13 @@ export interface ServerControllerConstructor {
 
 export interface App {
   render: Render
-  history: History
+  history: History<
+    LocationTypeMap['BQ']['Base'],
+    LocationTypeMap['BQ']['Intact']
+  > | History<
+    LocationTypeMap['QUERY']['Base'],
+    LocationTypeMap['QUERY']['Intact']
+  >
 }
 
 export interface Render {
@@ -66,5 +72,8 @@ export interface CreateHistoryInCA {
   (setting?: Settings): History<
     LocationTypeMap['BQ']['Base'],
     LocationTypeMap['BQ']['Intact']
+  > | History<
+    LocationTypeMap['QUERY']['Base'],
+    LocationTypeMap['QUERY']['Intact']
   >
 }
