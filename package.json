@@ -11,7 +11,7 @@
     "postbuild": "ts-node move.ts"
   },
   "files": [
-    "share",
+    "server",
     "client",
     "index.js"
   ],
