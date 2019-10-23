@@ -7,10 +7,12 @@ import CreateHistoryMap, {
   useQueries,
   CreateHistory,
   ILWithBQ,
+  BLWithBQ,
   History,
   ILWithQuery,
   BLWithQuery,
-  BLWithBQ
+  LocationTypeMap,
+  HistoryWithBFOL
 } from 'create-history'
 import defaultViewEngine from './viewEngine'
 import { createCache, createMap, ReqError } from '../share/util'
@@ -23,48 +25,45 @@ import {
   Context,
   ControllerConstructor,
   Cache,
-  ControllerCacheFunc,
   HistoryLocation,
-  ViewEngineRender,
   Listener,
   Loader,
   Route,
-  Controller,
-  WrapController
+  Callback
 } from '../share/type'
 import {
-  CreateHistoryInCA,
-  CreateApp,
-  GetControllerByLocation,
-  GetContainer,
-  Render,
   InitController,
-  CreateInitController,
-  DestoryContainer,
-  ClearContainer,
-  Subscribe,
-  Start,
   Stop,
-  Publish,
   ClientController,
-  ClientControllerConstructor
+  ClientControllerConstructor,
+  App
 } from './type'
 
-export const createHistory: CreateHistoryInCA = (settings) => {
+export function createHistory(settings?: Settings): HistoryWithBFOL<
+  LocationTypeMap['QUERY']['Base'],
+  LocationTypeMap['QUERY']['Intact']
+>{
   let finalAppSettings: Settings =
     Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
   finalAppSettings = Object.assign(finalAppSettings, settings)
 
   let chInit: CreateHistory<'NORMAL'> = CreateHistoryMap[finalAppSettings.type]
-
-  if (finalAppSettings.basename) {
-    return useBeforeUnload(useQueries(useBasename(chInit)))(finalAppSettings)
-  }
-
   return useBeforeUnload(useQueries(chInit))(finalAppSettings)
 }
 
-const createApp: CreateApp = (settings) => {
+export function createHistoryWithBasename(settings?: Settings): HistoryWithBFOL<
+  LocationTypeMap['BQ']['Base'],
+  LocationTypeMap['BQ']['Intact']
+>{
+  let finalAppSettings: Settings =
+    Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
+  finalAppSettings = Object.assign(finalAppSettings, settings)
+
+  let chInit: CreateHistory<'NORMAL'> = CreateHistoryMap[finalAppSettings.type]
+  return useBeforeUnload(useQueries(useBasename(chInit)))(finalAppSettings)
+}
+
+function createApp(settings: Partial<Settings>): App {
   let finalAppSettings: Settings =
     Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
 
@@ -84,7 +83,10 @@ const createApp: CreateApp = (settings) => {
     ...settings.context,
   }
 
-  let history = createHistory(finalAppSettings)
+  let history = finalAppSettings.basename
+    ? createHistoryWithBasename(finalAppSettings)
+    : createHistory(finalAppSettings)
+
   let matcher: Matcher = createMatcher(routes || [])
   let currentController: ClientController | null = null
   let currentLocation: HistoryLocation | null = null
@@ -93,21 +95,19 @@ const createApp: CreateApp = (settings) => {
 
   let cache: Cache<ClientController> = createCache(cacheAmount)
 
-  const saveControllerToCache: ControllerCacheFunc<ClientController> =
-    (controller) => {
+  function saveControllerToCache(controller: ClientController): void {
     cache.set(controller.location.raw, controller)
   }
 
-  const getControllerFromCache: GetControllerByLocation = (location) => {
+  function getControllerFromCache(location: HistoryLocation): ClientController {
     return cache.get(location.raw)
   }
 
-  const removeControllerFromCache: ControllerCacheFunc<ClientController> =
-    (controller) => {
+  function removeControllerFromCache(controller: ClientController): void {
     cache.remove(controller.location.raw)
   }
 
-  const getContainer: GetContainer = () => {
+  function getContainer(): HTMLElement | null {
     if (finalContainer) {
       return finalContainer
     }
@@ -118,7 +118,7 @@ const createApp: CreateApp = (settings) => {
     }
   }
 
-  const render: Render = (targetPath) => {
+  function render(targetPath: string | ILWithBQ | ILWithQuery): any {
     let location = typeof targetPath === 'string'
       ? history.createLocation(targetPath)
       : targetPath
@@ -155,8 +155,7 @@ const createApp: CreateApp = (settings) => {
 
   let controllers = createMap<ControllerConstructor, ClientControllerConstructor>()
 
-  const wrapController: WrapController<Controller, ClientControllerConstructor> =
-    (IController) => {
+  function wrapController(IController: ControllerConstructor): ClientControllerConstructor {
     if (controllers.has(IController)) {
       return controllers.get(IController) as ClientControllerConstructor
     }
@@ -207,7 +206,7 @@ const createApp: CreateApp = (settings) => {
     return WrapperController as ClientControllerConstructor
   }
 
-  const createInitController: CreateInitController = (location) => {
+  function createInitController(location: HistoryLocation): InitController {
     const initController: InitController = (iController) => {
       if (currentLocation !== location) {
         return
@@ -252,8 +251,17 @@ const createApp: CreateApp = (settings) => {
     return initController
   }
 
-  const renderToContainer: ViewEngineRender<any, ClientController> =
-    (element, controller) => {
+  function renderToContainer(
+    element: any
+  ): any
+  function renderToContainer(
+    element: any,
+    controller: ClientController
+  ): any
+  function renderToContainer(
+    element: any,
+    controller?: ClientController
+  ): any {
     if (controller) {
       saveControllerToCache(controller)
     }
@@ -265,7 +273,7 @@ const createApp: CreateApp = (settings) => {
     return viewEngine.render(element, controller, getContainer())
   }
 
-  const clearContainer: ClearContainer = () => {
+  function clearContainer(): void {
     if (viewEngine && viewEngine.clear) {
       let container = getContainer()
       if (container) {
@@ -274,7 +282,7 @@ const createApp: CreateApp = (settings) => {
     }
   }
 
-  const destroyController: DestoryContainer = () => {
+  function destroyController(): void {
     if (currentController && !currentController.KeepAlive) {
       removeControllerFromCache(currentController)
     }
@@ -286,7 +294,7 @@ const createApp: CreateApp = (settings) => {
 
   let listeners: Listener[] = []
 
-  const subscribe: Subscribe = (listener) => {
+  function subscribe(listener: Listener): Stop {
     let index: number = listeners.indexOf(listener)
     if (index === -1) {
       listeners.push(listener)
@@ -299,13 +307,24 @@ const createApp: CreateApp = (settings) => {
     }
   }
 
-  const publish: Publish = (location) => {
+  function publish(location: ILWithBQ | ILWithQuery): void {
     for (let i = 0, len = listeners.length; i < len; i++) {
       listeners[i](location, history)
     }
   }
 
-  const start: Start = (callback, shouldRenderWithCurrentLocation) => {
+  function start(): Stop | null
+  function start(
+    callback: Callback
+  ): Stop | null
+  function start(
+    callback: Callback,
+    shouldRenderWithCurrentLocation: boolean
+  ): Stop | null
+  function start(
+    callback?: Callback,
+    shouldRenderWithCurrentLocation?: boolean
+  ): Stop | null {
     let listener: (location: ILWithBQ | ILWithQuery) => void = location => {
       let result = render(location)
       if (Promise.resolve(result) == result) {
@@ -327,7 +346,7 @@ const createApp: CreateApp = (settings) => {
     return unsubscribe
   }
 
-  const stop: Stop = () => {
+  function stop(): void {
     if (unlisten) {
       unlisten()
       destroyController()
