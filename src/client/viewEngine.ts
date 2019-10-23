@@ -9,10 +9,20 @@ function render(
 ): any
 function render(
 	element: string,
+	controller: ClientController
+): any
+function render(
+	element: string,
 	container: Element | null
 ): any
 function render(
 	element: string,
+	controller: ClientController,
+	container: Element | null
+): any
+function render(
+	element: string,
+	controller?: ClientController | Element | null,
 	container?: Element | null
 ): any {
 	if (container) {

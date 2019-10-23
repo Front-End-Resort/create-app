@@ -167,7 +167,7 @@ const createApp: CreateApp = (settings) => {
   const wrapController: WrapController<Controller, ServerControllerConstructor> =
     (iController) => {
     if (controllers.has(iController)) {
-      return controllers.get(iController)
+      return controllers.get(iController) as ServerControllerConstructor
     }
 
     // implement the controller's life-cycle and useful methods

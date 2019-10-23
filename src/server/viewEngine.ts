@@ -9,11 +9,31 @@ interface ToString {
   [propName: string ]: any
   [propName: number ]: any
 }
-const render: ViewEngineRender<string | ToString, ServerController> = html => {
-	if (typeof html === 'string') {
-    return html
+function render(
+	element: string | ToString
+): any
+function render(
+	element: string | ToString,
+	controller: ServerController
+): any
+function render(
+	element: string | ToString,
+	container: Element | null
+): any
+function render(
+	element: string | ToString,
+	controller: ServerController,
+	container: Element | null
+): any
+function render(
+	element: string | ToString,
+	controller?: ServerController | Element | null,
+	container?: Element | null
+): any {
+	if (typeof element === 'string') {
+    return element
   } else {
-    return (html as ToString).toString()    
+    return (element as ToString).toString()    
   }
 }
 

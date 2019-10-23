@@ -158,7 +158,7 @@ const createApp: CreateApp = (settings) => {
   const wrapController: WrapController<Controller, ClientControllerConstructor> =
     (IController) => {
     if (controllers.has(IController)) {
-      return controllers.get(IController)
+      return controllers.get(IController) as ClientControllerConstructor
     }
     // implement the controller's life-cycle and useful methods
     class WrapperController extends IController {
