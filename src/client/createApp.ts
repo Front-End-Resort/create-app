@@ -320,13 +320,21 @@ function createApp(settings: Partial<Settings>): App {
     callback: Callback
   ): Stop
   function start(
+    shouldRenderWithCurrentLocation: boolean
+  ): Stop
+  function start(
     callback: Callback,
     shouldRenderWithCurrentLocation: boolean
   ): Stop
   function start(
-    callback?: Callback,
+    callback?: Callback | boolean,
     shouldRenderWithCurrentLocation?: boolean
   ): Stop | null {
+    if (typeof callback === 'boolean') {
+      shouldRenderWithCurrentLocation = callback
+      callback = undefined
+    }
+    
     let listener: (location: ILWithBQ | ILWithQuery) => void = location => {
       let result = render(location)
       if (Promise.resolve(result) == result) {

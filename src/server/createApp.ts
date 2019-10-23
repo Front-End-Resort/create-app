@@ -24,11 +24,11 @@ import {
   Matcher,
   Loader,
   Route,
-  Controller
+  Controller,
+  Callback
 } from '../share/type'
 import {
-  CreateApp,
-  Render,
+  App,
   InitController,
   FetchController,
   InitControllerReturn,
@@ -60,7 +60,7 @@ export function createHistoryWithBasename(settings?: Settings): History<
   return useQueries(useBasename(chInit))(finalAppSettings)
 }
 
-const createApp: CreateApp = (settings) => {
+function createApp(settings: Partial<Settings>): App {
   let finalAppSettings: Settings =
     Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
 
@@ -83,7 +83,27 @@ const createApp: CreateApp = (settings) => {
     ? createHistoryWithBasename(finalAppSettings)
     : createHistory(finalAppSettings)
 
-  const render: Render = (requestPath, injectContext, callback) => {
+  function render(
+    requestPath: string
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  function render(
+    requestPath: string,
+    injectContext: Context | null
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  function render(
+    requestPath: string,
+    callback: Callback
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  function render(
+    requestPath: string,
+    injectContext: Context | null,
+    callback: Callback
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  function render(
+    requestPath: string,
+    injectContext?: Context | null | Callback,
+    callback?: Callback
+  ): InitControllerReturn | Promise<InitControllerReturn> {
     let result: InitControllerReturn | Promise<InitControllerReturn> | null = null
 
     if (typeof injectContext === 'function') {
@@ -113,7 +133,9 @@ const createApp: CreateApp = (settings) => {
     return result
   }
 
-  const initController: InitController = (controller) => {
+  function initController(
+    controller: ServerController
+  ): InitControllerReturn | Promise<InitControllerReturn> {
     let component: any = controller.init()
 
     if (component === null) {
@@ -136,7 +158,10 @@ const createApp: CreateApp = (settings) => {
     }
   }
 
-  const fetchController: FetchController = (requestPath, injectContext) => {
+  function fetchController(
+    requestPath: string,
+    injectContext?: Context | null
+  ): ServerController | Promise<ServerController> {
     let location = history.createLocation(requestPath)
     let matches = matcher(location.pathname)
 
@@ -176,8 +201,7 @@ const createApp: CreateApp = (settings) => {
 
   let controllers = createMap<ControllerConstructor, ServerControllerConstructor>()
 
-  const wrapController: WrapController<Controller, ServerControllerConstructor> =
-    (iController) => {
+  function wrapController(iController: ControllerConstructor): ServerControllerConstructor {
     if (controllers.has(iController)) {
       return controllers.get(iController) as ServerControllerConstructor
     }
@@ -203,13 +227,26 @@ const createApp: CreateApp = (settings) => {
     return WrapperController
   }
 
-  const renderToString: ViewEngineRender<any, ServerController> =
-    (component, controller) => {
+  function renderToString(
+    element: any
+  ): any
+  function renderToString(
+    element: any,
+    controller: ServerController
+  ): any
+  function renderToString(
+    element: any,
+    controller?: ServerController
+  ): any {
     if (!viewEngine) {
       return null
     }
 
-    return viewEngine.render(component, controller)
+    if (controller) {
+      return viewEngine.render(element, controller)
+    } else {
+      return viewEngine.render(element)
+    }
   }
 
   return {
