@@ -313,14 +313,14 @@ function createApp(settings: Partial<Settings>): App {
     }
   }
 
-  function start(): Stop | null
+  function start(): null
   function start(
     callback: Callback
-  ): Stop | null
+  ): Stop
   function start(
     callback: Callback,
     shouldRenderWithCurrentLocation: boolean
-  ): Stop | null
+  ): Stop
   function start(
     callback?: Callback,
     shouldRenderWithCurrentLocation?: boolean
