@@ -1,13 +1,22 @@
 /**
  * default view engine for client
  */
-import { ViewEngineRender, ViewEngine } from '../share/type'
+import { ViewEngine } from '../share/type'
 import { ClientController } from './type'
 
-const render: ViewEngineRender<string, ClientController> =
-	(html, _, container) => {
+function render(
+	element: string
+): any
+function render(
+	element: string,
+	container: Element | null
+): any
+function render(
+	element: string,
+	container?: Element | null
+): any {
 	if (container) {
-		container.innerHTML = html as string
+		container.innerHTML = element as string
 	} else {
 		throw new Error(`container is inexistent`)
 	}

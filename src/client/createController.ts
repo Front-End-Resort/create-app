@@ -1,8 +1,10 @@
-import { CreateController } from '../share/type'
+import { HistoryLocation, Context } from '../share/type'
 import { ClientController, ClientControllerConstructor } from './type'
 
-const createController: CreateController<ClientController, ClientControllerConstructor> =
-  (c, location, context) => {
+export default function createController(
+  c: ClientControllerConstructor,
+  location: HistoryLocation,
+  context: Context
+): ClientController {
   return new c(location, context)
 }
-export default createController

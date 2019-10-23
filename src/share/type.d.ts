@@ -127,17 +127,6 @@ export interface WrapController<C extends Controller, CC> {
   (IController: ControllerConstructor): CC
 }
 
-export interface CreateController<
-  C extends Controller,
-  CC = ControllerConstructor<C>
-> {
-  (
-    c: CC,
-    location: HistoryLocation,
-    context: Context
-  ): C
-}
-
 export interface ControllerCacheFunc<C extends Controller> {
   (controller: C): void
 }
