@@ -207,7 +207,9 @@ function createApp(settings: Partial<Settings>): App {
   }
 
   function createInitController(location: HistoryLocation): InitController {
-    const initController: InitController = (iController) => {
+    function initController (
+      iController: ControllerConstructor | Promise<ControllerConstructor>
+    ): any {
       if (currentLocation !== location) {
         return
       }

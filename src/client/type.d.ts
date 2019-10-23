@@ -37,10 +37,6 @@ export interface ClientControllerConstructor {
   ): ClientController
 }
 
-interface CreateApp {
-  (settings: Partial<Settings>): App
-}
-
 interface Render {
   (targetPath: string | ILWithBQ | ILWithQuery): any
 }
@@ -64,6 +60,10 @@ interface Publish {
   (location: ILWithBQ | ILWithQuery): void
 }
 
+interface Subscribe {
+  (listener: Listener): () => void
+}
+
 interface App {
   start: Start
   stop: Stop
@@ -78,42 +78,8 @@ interface App {
   subscribe: Subscribe
 }
 
-interface Subscribe {
-  (listener: Listener): () => void
-}
-
 interface InitController {
   (
     c: ControllerConstructor | Promise<ControllerConstructor>
   ): any
-}
-
-interface CreateInitController {
-  (location: HistoryLocation): InitController
-}
-
-interface ClearContainer {
-  (): void
-}
-
-interface DestoryContainer {
-  (): void
-}
-
-interface GetContainer {
-  (): HTMLElement | null
-}
-
-interface GetControllerByLocation {
-  (location: HistoryLocation): ClientController
-}
-
-export interface CreateHistoryInCA {
-  (setting?: Settings): HistoryWithBFOL<
-    LocationTypeMap['BQ']['Base'],
-    LocationTypeMap['BQ']['Intact']
-  > | HistoryWithBFOL<
-    LocationTypeMap['QUERY']['Base'],
-    LocationTypeMap['QUERY']['Intact']
-  >
 }

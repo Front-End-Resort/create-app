@@ -6,7 +6,8 @@ import {
   useQueries,
   CreateHistory,
   createMemoryHistory,
-  ILWithBQ
+  History,
+  LocationTypeMap
 } from 'create-history'
 import { createMap, ReqError } from '../share/util'
 import defaultViewEngine from './viewEngine'
@@ -26,7 +27,6 @@ import {
   Controller
 } from '../share/type'
 import {
-  CreateHistoryInCA,
   CreateApp,
   Render,
   InitController,
@@ -36,18 +36,28 @@ import {
   ServerControllerConstructor
 } from './type'
 
-export const createHistory: CreateHistoryInCA = (settings) => {
+export function createHistory(settings?: Settings): History<
+  LocationTypeMap['QUERY']['Base'],
+  LocationTypeMap['QUERY']['Intact']
+> {
   let finalAppSettings: Settings =
     Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
   finalAppSettings = Object.assign(finalAppSettings, settings)
 
   let chInit: CreateHistory<'NORMAL'> = createMemoryHistory
-
-  if (finalAppSettings.basename) {
-    return useQueries(useBasename(chInit))(finalAppSettings)
-  }
-  
   return useQueries(chInit)(finalAppSettings)
+}
+
+export function createHistoryWithBasename(settings?: Settings): History<
+  LocationTypeMap['BQ']['Base'],
+  LocationTypeMap['BQ']['Intact']
+>{
+  let finalAppSettings: Settings =
+    Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
+  finalAppSettings = Object.assign(finalAppSettings, settings)
+
+  let chInit: CreateHistory<'NORMAL'> = createMemoryHistory
+  return useQueries(useBasename(chInit))(finalAppSettings)
 }
 
 const createApp: CreateApp = (settings) => {
@@ -69,7 +79,9 @@ const createApp: CreateApp = (settings) => {
   }
 
   let matcher = createMatcher(routes || [])
-  let history = createHistory(finalAppSettings)
+  let history = finalAppSettings.basename
+    ? createHistoryWithBasename(finalAppSettings)
+    : createHistory(finalAppSettings)
 
   const render: Render = (requestPath, injectContext, callback) => {
     let result: InitControllerReturn | Promise<InitControllerReturn> | null = null
