@@ -19,18 +19,13 @@ import {
   Context,
   ControllerConstructor,
   HistoryLocation,
-  WrapController,
-  ViewEngineRender,
   Matcher,
   Loader,
   Route,
-  Controller,
   Callback
 } from '../share/type'
 import {
   App,
-  InitController,
-  FetchController,
   InitControllerReturn,
   ServerController,
   ServerControllerConstructor

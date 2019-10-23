@@ -42,38 +42,7 @@ export interface Render {
   ): InitControllerReturn | Promise<InitControllerReturn>
 }
 
-interface CreateApp {
-  (settings: Partial<Settings>): App
-}
-
 interface InitControllerReturn {
   content?: any
   controller: Controller
-}
-
-interface InitController {
-  (
-    c: ServerController
-  ): InitControllerReturn | Promise<InitControllerReturn>
-}
-
-interface CreateInitController {
-  (location: HistoryBaseLocation): InitController
-}
-
-export interface FetchController {
-  (
-    requestPath: string,
-    injectContext?: Context | null
-  ): ServerController | Promise<ServerController>
-}
-
-export interface CreateHistoryInCA {
-  (setting?: Settings): History<
-    LocationTypeMap['BQ']['Base'],
-    LocationTypeMap['BQ']['Intact']
-  > | History<
-    LocationTypeMap['QUERY']['Base'],
-    LocationTypeMap['QUERY']['Intact']
-  >
 }

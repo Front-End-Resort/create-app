@@ -123,14 +123,6 @@ export interface ControllerConstructor<C extends Controller = Controller> {
   ): C
 }
 
-export interface WrapController<C extends Controller, CC> {
-  (IController: ControllerConstructor): CC
-}
-
-export interface ControllerCacheFunc<C extends Controller> {
-  (controller: C): void
-}
-
 export interface Cache<T> {
   keys: () => string[]
   get: (key: string) => T
@@ -153,10 +145,6 @@ export interface AppMap<K, V> {
 export interface MapItem<K, V> {
   key: K
   value: V
-}
-
-export interface OtherElement {
-  [propName: string]: any
 }
 
 export interface ViewEngineRender<
