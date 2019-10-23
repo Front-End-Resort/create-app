@@ -2,26 +2,7 @@ import pathToRegexp from 'path-to-regexp'
 import * as _ from './util'
 import { Route, IntactRoute, Matcher, Params, ControllerConstructor, LoadController } from './type'
 
-export interface CreateMatcher {
-  (routes: Route[]): Matcher
-}
-
-export interface CreateRoute {
-  (route: Route): IntactRoute
-}
-
-export interface GetParams {
-  (
-    strMatches: RegExpExecArray,
-    keys: pathToRegexp.Key[]
-  ): Params
-}
-
-export interface CleanPath {
-  (path: string): string
-}
-
-const createMatcher: CreateMatcher = (routes) => {
+export default function createMatcher(routes: Route[]): Matcher {
   const finalRoutes: IntactRoute[] = routes.map(createRoute)
   const routeLength: number = finalRoutes.length
   const matcher: Matcher = (pathname) => {
@@ -46,9 +27,7 @@ const createMatcher: CreateMatcher = (routes) => {
   return matcher
 }
 
-export default createMatcher
-
-const createRoute: CreateRoute = (route) => {
+function createRoute(route: Route): IntactRoute {
   let finalRoute: Route = Object.assign({}, route)
   finalRoute.keys = []
   let keys: pathToRegexp.Key[] = finalRoute.keys
@@ -57,7 +36,10 @@ const createRoute: CreateRoute = (route) => {
   return intactRoute
 }
 
-const getParams: GetParams = (matches, keys) => {
+function getParams(
+  matches: RegExpExecArray,
+  keys: pathToRegexp.Key[]
+): Params {
   let params: Params = {}
   for (let i = 1, len = matches.length; i < len; i++) {
     let key = keys[i - 1]
@@ -72,6 +54,6 @@ const getParams: GetParams = (matches, keys) => {
   return params
 }
 
-const cleanPath: CleanPath = (path) => {
+function cleanPath(path: string): string {
   return path.replace(/\/\//g, '/')
 }

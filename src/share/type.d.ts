@@ -143,12 +143,8 @@ export interface CacheStorage<T> {
   [key: string]: T
 }
 
-export interface CreateCache {
-  <T>(amount?: number): Cache<T>
-}
-
 export interface AppMap<K, V> {
-  get: (key: K) => V
+  get: (key: K) => V | undefined
   set: (key: K, value: V) => void
   has: (key: K) => boolean
   remove: (key: K) => void
@@ -157,10 +153,6 @@ export interface AppMap<K, V> {
 export interface MapItem<K, V> {
   key: K
   value: V
-}
-
-export interface CreateMap {
-  <K, V>(): AppMap<K, V>
 }
 
 export interface OtherElement {

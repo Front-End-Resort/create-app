@@ -1,9 +1,7 @@
 // util
 import {
-  CreateCache,
   CacheStorage,
   Cache,
-  CreateMap,
   MapItem,
   AppMap
 } from './type'
@@ -16,61 +14,61 @@ export class ReqError extends Error {
   }
 }
 
-export const createCache: CreateCache = <T>(amount: number = 10) => {
+export function createCache<T>(amount: number = 10): Cache<T> {
   let cache: CacheStorage<T> = {}
 
-  const keys = () => {
+  function keys(): string[] {
     return Object.keys(cache)
   }
 
-  const checkAmount = () => {
+  function checkAmount(): void {
     let cacheKeys: string[] = keys()
     if (cacheKeys.length > amount) {
       remove(cacheKeys[0])
     }
   }
 
-  const set: (key: string, value: T) => void = (key, value) => {
+  function set(key: string, value: T): void {
     remove(key)
     cache[key] = value
     checkAmount()
   }
 
-  const get: (key: string) => T = (key) => {
-    return <T>cache[key]
+  function get(key: string): T {
+    return cache[key]
   }
 
-  const remove: (key: string) => void = (key) => {
+  function remove(key: string): void {
     if (cache.hasOwnProperty(key)) {
       delete cache[key]
     }
   }
 
-  const getAll: () => CacheStorage<T> = () => {
+  function getAll(): CacheStorage<T> {
     return cache
   }
 
-  return { keys, get, set, remove, getAll } as Cache<T>
+  return { keys, get, set, remove, getAll }
 }
 
-export const createMap: CreateMap = <K, V>() => {
+export function createMap<K, V>(): AppMap<K, V> {
   let list: MapItem<K, V>[] = []
 
-  const find: (key: K) => MapItem<K, V>[] = (key) => {
+  function find(key: K): MapItem<K, V>[] {
     return list.filter(item => item.key === key)
   }
 
-  const has: (key: K) => boolean = (key) => {
+  function has(key: K): boolean {
     let result = find(key)
     return result.length > 0
   }
 
-  const get: (key: K) => V | undefined = (key) => {
+  function get(key: K): V | undefined {
     let result = find(key)
     return result.length ? result[0].value : undefined
   }
 
-  const set: (key: K, value: V) => void = (key, value) => {
+  function set(key: K, value: V): void {
     let result = find(key)
 
     if (result.length === 0) {
@@ -81,9 +79,9 @@ export const createMap: CreateMap = <K, V>() => {
     }
   }
 
-  const remove: (key: K) => void = (key) => {
+  function remove(key: K): void {
     list = list.filter(item => item.key !== key)
   }
 
-  return { get, set, has, remove } as AppMap<K, V>
+  return { get, set, has, remove }
 }
