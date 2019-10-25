@@ -55,7 +55,7 @@ export function createHistoryWithBasename(settings?: Settings): History<
   return useQueries(useBasename(chInit))(finalAppSettings)
 }
 
-function createApp(settings: Partial<Settings>): App {
+export default function createApp(settings: Partial<Settings>): App {
   let finalAppSettings: Settings =
     Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
 
@@ -249,4 +249,3 @@ function createApp(settings: Partial<Settings>): App {
     history,
   }
 }
-export default createApp
