@@ -1,5 +1,3 @@
-export * from '../dist/server'
-
-import createApp from '../dist/server'
-
+export * from '../lib/server'
+import createApp from '../lib/server'
 export default createApp

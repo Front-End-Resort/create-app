@@ -6,13 +6,14 @@
   "scripts": {
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watchAll",
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf lib",
     "build": "tsc",
     "postbuild": "ts-node move.ts"
   },
   "files": [
     "server",
     "client",
+    "lib",
     "index.js"
   ],
   "repository": {
