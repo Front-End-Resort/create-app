@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
 import * as _ from './util'
-import { Route, IntactRoute, Matcher, Params, ControllerConstructor, LoadController } from './type'
+import { Route, IntactRoute, Matcher, Params } from './type'
 
 export default function createMatcher(routes: Route[]): Matcher {
   const finalRoutes: IntactRoute[] = routes.map(createRoute)

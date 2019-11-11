@@ -118,7 +118,7 @@ export default function createApp(settings: Partial<Settings>): App {
     }
   }
 
-  function render(targetPath: string | ILWithBQ | ILWithQuery): any {
+  function render(targetPath: string | ILWithBQ | ILWithQuery): unknown {
     let location = typeof targetPath === 'string'
       ? history.createLocation(targetPath)
       : targetPath
@@ -209,7 +209,7 @@ export default function createApp(settings: Partial<Settings>): App {
   function createInitController(location: HistoryLocation): InitController {
     function initController (
       iController: ControllerConstructor | Promise<ControllerConstructor>
-    ): any {
+    ): unknown {
       if (currentLocation !== location) {
         return
       }
@@ -217,7 +217,7 @@ export default function createApp(settings: Partial<Settings>): App {
       destroyController()
 
       let controller = currentController = getControllerFromCache(location)
-      let element: any | Promise<any> = null
+      let element: unknown | Promise<unknown> = null
 
       if (!!controller) {
         if (controller.restore) {
@@ -241,7 +241,7 @@ export default function createApp(settings: Partial<Settings>): App {
       }
 
       if (Promise.resolve(element) == element) {
-        return (element as Promise<any>).then(result => {
+        return (element as Promise<unknown>).then(result => {
           if (currentLocation !== location || result == null) {
             return null
           }
@@ -254,16 +254,16 @@ export default function createApp(settings: Partial<Settings>): App {
   }
 
   function renderToContainer(
-    element: any
-  ): any
+    element: unknown
+  ): unknown
   function renderToContainer(
-    element: any,
+    element: unknown,
     controller: ClientController
-  ): any
+  ): unknown
   function renderToContainer(
-    element: any,
+    element: unknown,
     controller?: ClientController
-  ): any {
+  ): unknown {
     if (controller) {
       saveControllerToCache(controller)
     }
@@ -338,7 +338,7 @@ export default function createApp(settings: Partial<Settings>): App {
     let listener: (location: ILWithBQ | ILWithQuery) => void = location => {
       let result = render(location)
       if (Promise.resolve(result) == result) {
-        result.then(() => {
+        (result as Promise<unknown>).then(() => {
           publish(location)
         })
       } else {

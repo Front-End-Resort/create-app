@@ -1,7 +1,7 @@
-import { Controller, ClientController } from '../../src/client'
+import { Controller } from '../../src/client'
 export let getController = () => controller
 
-let controller: any
+let controller: Controller
 
 export class Home implements Controller {
   constructor() {
@@ -24,7 +24,7 @@ export class List implements Controller {
     controller = this
   }
   init() {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<string>((resolve, _) => {
       setTimeout(() => {
         resolve(this.render())
       }, 50)

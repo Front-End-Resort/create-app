@@ -36,13 +36,29 @@ export interface App {
 
 export interface Render {
   (
+    requestPath: string
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  (
     requestPath: string,
-    injectContext?: Context | null,
+    injectContext: Context | null
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  (
+    requestPath: string,
+    callback: Callback
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  (
+    requestPath: string,
+    injectContext: Context | null,
+    callback: Callback
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  (
+    requestPath: string,
+    injectContext?: Context | null | Callback,
     callback?: Callback
   ): InitControllerReturn | Promise<InitControllerReturn>
 }
 
 interface InitControllerReturn {
-  content?: any
+  content?: unknown
   controller: Controller
 }

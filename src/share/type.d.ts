@@ -8,7 +8,9 @@ import createHistoryMap, {
   BLWithBQ,
   CreateHistory,
   LocationTypeMap,
-  HistoryWithBFOL
+  HistoryWithBFOL,
+  BLWithQuery,
+  ILWithQuery
 } from 'create-history'
 import pathToRegexp from 'path-to-regexp'
 
@@ -29,7 +31,7 @@ export interface IntactRoute {
 }
 
 export interface Params {
-  [propName: string]: any
+  [propName: string]: unknown
 }
 
 export interface Matches<C> {
@@ -62,7 +64,7 @@ export interface Settings extends HistoryOptions {
   loader: Loader
   cacheAmount?: number
   routes?: Route[]
-  viewEngine?: ViewEngine<any, Controller>
+  viewEngine?: ViewEngine<unknown, Controller>
 }
 
 export type Listener = Function
@@ -74,7 +76,7 @@ export interface Context {
   isServer?: boolean
   prevLocation?: object | null
   location?: HistoryBaseLocation
-  [propName: string]: any
+  [propName: string]: unknown
 }
 
 export interface HistoryBaseLocation extends BLWithBQ {
@@ -91,7 +93,19 @@ export interface HistoryLocation extends ILWithBQ {
 
 export interface Loader {
   <C extends Controller>(
-    controller: unknown,
+    controller: any
+  ): ControllerConstructor | Promise<ControllerConstructor>
+  <C extends Controller>(
+    controller: any,
+    location: HistoryLocation
+  ): ControllerConstructor | Promise<ControllerConstructor>
+  <C extends Controller>(
+    controller: any,
+    location: HistoryLocation,
+    context: Context
+  ): ControllerConstructor | Promise<ControllerConstructor>
+  <C extends Controller>(
+    controller: any,
     location?: HistoryLocation,
     context?: Context
   ): ControllerConstructor | Promise<ControllerConstructor>
@@ -107,13 +121,18 @@ export interface LoadController {
 export interface Controller {
   KeepAlive?: boolean
   count?: number
-  restore?(location?: HistoryLocation, context?: Context): any
-  init(): any
-  render(): any
+  location?: HistoryLocation
+  context?: Context
+  history?: History<BLWithBQ, ILWithBQ> | History<BLWithQuery, ILWithQuery>
+  matcher?: Matcher
+  loader?: Loader
+  routes?: Route[]
+  restore?(location?: HistoryLocation, context?: Context): unknown
+  init(): unknown
+  render(): unknown
   destroy?(): void
   getContainer?(): HTMLElement | null
   refreshView?(): void
-  [x: string]: any
 }
 
 export interface ControllerConstructor<C extends Controller = Controller> {
@@ -155,5 +174,5 @@ export interface ViewEngineRender<
     element: E,
     controller?: C,
     container?: Element | null
-  ): any
+  ): unknown
 }

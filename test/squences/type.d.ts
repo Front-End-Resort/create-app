@@ -5,7 +5,7 @@ export interface Step {
 }
 
 export interface Done {
-  (...args: any[]): void
+  (...args: unknown[]): void
 }
 
 export interface Subscribe {

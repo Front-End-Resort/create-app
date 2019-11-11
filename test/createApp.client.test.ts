@@ -1,5 +1,5 @@
 import execSteps from './squences/execSteps'
-import createApp, { App, Context, Settings, CreateHistoryType, Route, ControllerConstructor, Loader, Controller } from '../src/client'
+import createApp, { App, Context, Settings, CreateHistoryType, Route, ControllerConstructor, Loader, Controller, HistoryLocation } from '../src/client'
 import { getController, Home, List, Detail, Restore, NotFound } from './squences/classes'
 import { Step } from './squences/type'
 
@@ -11,7 +11,7 @@ const createTest = () => {
 
     it('should get container by controller.getContainer', () => {
         let controller = getController()
-        if (controller) {
+        if (controller && controller.getContainer) {
             let container = controller.getContainer()
             expect(container).toBe(document.querySelector('body'))
         }
@@ -40,8 +40,10 @@ const createTest = () => {
 
                 content = document.body.innerHTML
                 expect(content).toEqual('')
-
-                getController().refreshView()
+                let controller = getController()
+                if (controller && controller.refreshView) {
+                    controller.refreshView()
+                }
                 content = document.body.innerHTML
                 expect(content).toEqual('home')
                 expect(location && location.pathname).toEqual('/')
@@ -98,13 +100,19 @@ const createTest = () => {
                 let content = document.body.innerHTML
                 expect(content).toEqual('home')
                 expect(location && location.pathname).toEqual('/')
-                getController().history.push('/detail')
+                let controller = getController()
+                if (controller && controller.history && controller.history.push) {
+                    controller.history.push('/detail')
+                }
             },
             location => {
                 let content = document.body.innerHTML
                 expect(content).toEqual('detail')
                 expect(location && location.pathname).toEqual('/detail')
-                getController().history.replace('/notfound')
+                let controller = getController()
+                if (controller && controller.history && controller.history.replace) {
+                    controller.history.replace('/notfound')
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -123,7 +131,10 @@ const createTest = () => {
             count += 1
             expect(count).toBe(1)
         }
-        getController().history.push('/detail')
+        let controller = getController()
+        if (controller && controller.history && controller.history.push) {
+            controller.history.push('/detail')
+        }
     })
 
     it('should cache controller when KeepAlive is true and call controller.restore when page did back', (done) => {
@@ -133,7 +144,10 @@ const createTest = () => {
                 let content = document.body.innerHTML
                 expect(content).toEqual('home')
                 expect(location && location.pathname).toEqual('/')
-                getController().history.push('/restore')
+                let controller = getController()
+                if (controller && controller.history && controller.history.push) {
+                    controller.history.push('/restore')
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -141,13 +155,19 @@ const createTest = () => {
                 expect(content).toEqual('restore')
                 expect(location && location.pathname).toEqual('/restore')
                 expect(getController().count).toEqual(0)
-                getController().history.push('/notfound')
+                let controller = getController()
+                if (controller && controller.history && controller.history.push) {
+                    controller.history.push('/notfound')
+                }
             },
             location => {
                 let content = document.body.innerHTML
                 expect(content).toEqual('not found')
                 expect(location && location.pathname).toEqual('/notfound')
-                getController().history.goBack()
+                let controller = getController()
+                if (controller && controller.history && controller.history.goBack) {
+                    controller.history.goBack()
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -155,13 +175,19 @@ const createTest = () => {
                 expect(location && location.pathname).toEqual('/restore')
                 expect(getController() === restore).toBe(true)
                 expect(getController().count).toEqual(1)
-                getController().history.goBack()
+                let controller = getController()
+                if (controller && controller.history && controller.history.goBack) {
+                    controller.history.goBack()
+                }
             },
             location => {
                 let content = document.body.innerHTML
                 expect(content).toEqual('home')
                 expect(location && location.pathname).toEqual('/')
-                getController().history.goForward()
+                let controller = getController()
+                if (controller && controller.history && controller.history.goForward) {
+                    controller.history.goForward()
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -176,14 +202,17 @@ const createTest = () => {
     })
 
     it('should support async controller.restore method', (done) => {
-        let start: any
+        let start: number
         let restore: any = null
         let steps: Step[] = [
             location => {
                 let content = document.body.innerHTML
                 expect(content).toEqual('home')
                 expect(location && location.pathname).toEqual('/')
-                getController().history.push('/restore')
+                let controller = getController()
+                if (controller && controller.history && controller.history.push) {
+                    controller.history.push('/restore')
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -191,7 +220,10 @@ const createTest = () => {
                 expect(content).toEqual('restore')
                 expect(location && location.pathname).toEqual('/restore')
                 expect(getController().count).toEqual(0)
-                getController().history.push('/notfound')
+                let controller = getController()
+                if (controller && controller.history && controller.history.push) {
+                    controller.history.push('/notfound')
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -199,7 +231,7 @@ const createTest = () => {
                 expect(location && location.pathname).toEqual('/notfound')
                 
                 let _restore = restore.restore
-                restore.restore = function(location: any, context: any) {
+                restore.restore = function(location: HistoryLocation, context: unknown) {
                     expect(location === this.location).toEqual(false)
                     expect(location.raw).toEqual(this.location.raw)
                     expect(context).toEqual(this.context)
@@ -208,7 +240,10 @@ const createTest = () => {
                 }
 
                 start = Date.now()
-                getController().history.goBack()
+                let controller = getController()
+                if (controller && controller.history && controller.history.goBack) {
+                    controller.history.goBack()
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -230,14 +265,21 @@ const createTest = () => {
                 expect(content).toEqual('home')
                 expect(location && location.pathname).toEqual('/')
                 controller = getController()
-                controller.saveToCache()
-                controller.history.push('/detail')
+                if (controller && controller.saveToCache) {
+                    controller.saveToCache()
+                }
+                if (controller && controller.history && controller.history.push) {
+                    controller.history.push('/detail')
+                }
             },
             location => {
                 let content = document.body.innerHTML
                 expect(content).toEqual('detail')
                 expect(location && location.pathname).toEqual('/detail')
-                getController().history.goBack()
+                let c = getController()
+                if (c && c.history && c.history.goBack) {
+                    c.history.goBack()
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -258,8 +300,12 @@ const createTest = () => {
                 expect(content).toEqual('home')
                 expect(location && location.pathname).toEqual('/')
                 controller = getController()
-                controller.saveToCache()
-                controller.history.push('/detail')
+                if (controller && controller.saveToCache) {
+                    controller.saveToCache()
+                }
+                if (controller && controller.history && controller.history.push) {
+                    controller.history.push('/detail')
+                }
             },
             location => {
                 let content = document.body.innerHTML
@@ -358,7 +404,7 @@ const describeTest: (type: CreateHistoryType) => void = (type) => {
 
         describe('sync mode', () => {
             beforeEach(() => {
-                let loader: Loader = (controller) => {
+                let loader: Loader = (controller: unknown) => {
                     let iController: ControllerConstructor<Controller>
                     switch (controller) {
                         case 'home':
@@ -388,7 +434,7 @@ const describeTest: (type: CreateHistoryType) => void = (type) => {
 
         describe('async mode', () => {
             beforeEach(() => {
-                let loader: Loader = (controller) => {
+                let loader: Loader = (controller: unknown) => {
                     let iController: ControllerConstructor
                     switch (controller) {
                         case 'home':
@@ -407,7 +453,7 @@ const describeTest: (type: CreateHistoryType) => void = (type) => {
                           iController = NotFound
                     }
 
-                    return new Promise((resolve) => {
+                    return new Promise<ControllerConstructor>((resolve) => {
                         setTimeout(() => {
                             resolve(iController)
                         }, 10)

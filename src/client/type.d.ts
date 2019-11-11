@@ -38,7 +38,7 @@ export interface ClientControllerConstructor {
 }
 
 interface Render {
-  (targetPath: string | ILWithBQ | ILWithQuery): any
+  (targetPath: string | ILWithBQ | ILWithQuery): unknown
 }
 
 interface Stop {
@@ -77,5 +77,5 @@ interface App {
 interface InitController {
   (
     c: ControllerConstructor | Promise<ControllerConstructor>
-  ): any
+  ): unknown
 }

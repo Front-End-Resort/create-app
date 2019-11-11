@@ -6,30 +6,30 @@ import { ServerController } from './type'
 
 interface ToString {
   toString(): string
-  [propName: string ]: any
-  [propName: number ]: any
+  [propName: string ]: unknown
+  [propName: number ]: unknown
 }
 function render(
 	element: string | ToString
-): any
+): unknown
 function render(
 	element: string | ToString,
 	controller: ServerController
-): any
+): unknown
 function render(
 	element: string | ToString,
 	container: Element | null
-): any
+): unknown
 function render(
 	element: string | ToString,
 	controller: ServerController,
 	container: Element | null
-): any
+): unknown
 function render(
 	element: string | ToString,
 	controller?: ServerController | Element | null,
 	container?: Element | null
-): any {
+): unknown {
 	if (typeof element === 'string') {
     return element
   } else {

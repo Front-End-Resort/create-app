@@ -1,4 +1,5 @@
 import { Step, Subscribe, Done } from './type'
+import { HistoryBaseLocation } from '../../src/client'
 
 const execSteps: (
   steps: Step[],
@@ -8,14 +9,14 @@ const execSteps: (
   let index: number = 0
   let unsubscribe: Function
 
-  const cleanup = (...args: any[]) => {
+  const cleanup = (...args: unknown[]) => {
     unsubscribe()
     done(...args)
   }
 
-  const execNextStep = (...args: any[]) => {
+  const execNextStep = (location: HistoryBaseLocation) => {
     try {
-      steps[index++](...args)
+      steps[index++](location)
 
       if (index === steps.length)
         cleanup()

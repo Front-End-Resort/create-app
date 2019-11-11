@@ -131,13 +131,13 @@ export default function createApp(settings: Partial<Settings>): App {
   function initController(
     controller: ServerController
   ): InitControllerReturn | Promise<InitControllerReturn> {
-    let component: any = controller.init()
+    let component: unknown = controller.init()
 
     if (component === null) {
       return { controller: controller }
     }
     if (Promise.resolve(component) == component) {
-      return component.then((component: any) => {
+      return (component as Promise<unknown>).then((component) => {
         if (component == null) {
           return { controller: controller }
         }
@@ -223,16 +223,16 @@ export default function createApp(settings: Partial<Settings>): App {
   }
 
   function renderToString(
-    element: any
-  ): any
+    element: unknown
+  ): unknown
   function renderToString(
-    element: any,
+    element: unknown,
     controller: ServerController
-  ): any
+  ): unknown
   function renderToString(
-    element: any,
+    element: unknown,
     controller?: ServerController
-  ): any {
+  ): unknown {
     if (!viewEngine) {
       return null
     }

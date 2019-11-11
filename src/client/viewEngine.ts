@@ -6,25 +6,25 @@ import { ClientController } from './type'
 
 function render(
 	element: string
-): any
+): unknown
 function render(
 	element: string,
 	controller: ClientController
-): any
+): unknown
 function render(
 	element: string,
 	container: Element | null
-): any
+): unknown
 function render(
 	element: string,
 	controller: ClientController,
 	container: Element | null
-): any
+): unknown
 function render(
 	element: string,
-	controller?: ClientController | Element | null,
+	_?: ClientController | Element | null,
 	container?: Element | null
-): any {
+): unknown {
 	if (container) {
 		container.innerHTML = element as string
 	} else {

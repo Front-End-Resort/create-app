@@ -1,5 +1,5 @@
 import { Home, List, Detail, NotFound } from './squences/classes'
-import createApp, { App } from '../src/server';
+import createApp, { App, Settings, ControllerConstructor, Loader } from '../src/server';
 
 let app: App
 
@@ -15,10 +15,8 @@ describe('createApp-server', () => {
         })
     })
 
-    let initApp = (settings: any) => {
-        app = createApp({
-            ...settings,
-        })
+    let initApp = (settings: Partial<Settings>) => {
+        app = createApp(settings)
     }
 
     describe('feature: works without custom loader', () => {
@@ -85,8 +83,8 @@ describe('createApp-server', () => {
 
         describe('sync mode', () => {
             beforeEach(() => {
-                let loader = (controller: string) => {
-                    let Controller: any
+                let loader: Loader = (controller: string) => {
+                    let Controller: ControllerConstructor
                     switch (controller) {
                         case 'home':
                             Controller = Home
@@ -104,7 +102,7 @@ describe('createApp-server', () => {
                 }
                 return initApp({
                     routes,
-                    loader,
+                    loader
                 })
             })
             createTest()
@@ -112,8 +110,8 @@ describe('createApp-server', () => {
 
         describe('async mode', () => {
             beforeEach(() => {
-                let loader = (controller: string) => {
-                    let Controller: any
+                let loader: Loader = (controller: string) => {
+                    let Controller: ControllerConstructor
                     switch (controller) {
                         case 'home':
                             Controller = Home
@@ -128,7 +126,7 @@ describe('createApp-server', () => {
                             Controller = NotFound
                     }
 
-                    return new Promise((resolve) => {
+                    return new Promise<ControllerConstructor>((resolve) => {
                         setTimeout(() => {
                             resolve(Controller)
                         }, 10)
@@ -136,7 +134,7 @@ describe('createApp-server', () => {
                 }
                 return initApp({
                     routes,
-                    loader,
+                    loader
                 })
             })
             createTest()
@@ -153,23 +151,23 @@ function createTest() {
                 done()
             }
         }
-        app.render('/', {}, (error: any, {content}: any) => {
+        app.render('/', {}, (error: unknown, {content}: any) => {
             expect(content).toEqual('home')
             cleanup()
         })
-        app.render('/list', (error: any, {content}: any) => {
+        app.render('/list', (error: unknown, {content}: any) => {
             expect(content).toEqual('list')
             cleanup()
         })
-        app.render('/detail', (error: any, {content}: any) => {
+        app.render('/detail', (error: unknown, {content}: any) => {
             expect(content).toEqual('detail')
             cleanup()
         })
-        app.render('/notfound', (error: any, {content}: any) => {
+        app.render('/notfound', (error: unknown, {content}: any) => {
             expect(content).toEqual('not found')
             cleanup()
         })
-        app.render(`/random-${Math.random().toString(36).substr(2)}`, (error: any, {content}: any) => {
+        app.render(`/random-${Math.random().toString(36).substr(2)}`, (error: unknown, {content}: any) => {
             expect(content).toEqual('not found')
             cleanup()
         })
@@ -202,12 +200,16 @@ function createTest() {
     it('should support inject context to app.render method', done => {
         let home = Promise.resolve(app.render('/', { test: 1 }))
             .then(({content, controller}) => {
-                expect(controller.context.test).toEqual(1)
+                if (controller && controller.context) {
+                    expect(controller.context.test).toEqual(1)
+                }
                 expect(content).toEqual('home')
             })
         let list = Promise.resolve(app.render('/list', { test: 2 }))
             .then(({content, controller}) => {
-                expect(controller.context.test).toEqual(2)
+                if (controller && controller.context) {
+                    expect(controller.context.test).toEqual(2)
+                }
                 expect(content).toEqual('list')
             })
         Promise.all([home, list])
