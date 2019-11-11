@@ -56,10 +56,6 @@ interface Stop {
   (): void
 }
 
-interface Publish {
-  (location: ILWithBQ | ILWithQuery): void
-}
-
 interface Subscribe {
   (listener: Listener): () => void
 }
