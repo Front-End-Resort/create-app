@@ -171,8 +171,15 @@ export interface ViewEngineRender<
   C extends Controller = Controller
 > {
   (
+    element: E
+  ): unknown
+  (
     element: E,
-    controller?: C,
-    container?: Element | null
+    controller: C
+  ): unknown
+  (
+    element: E,
+    controller: C,
+    container: Element | null
   ): unknown
 }

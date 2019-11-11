@@ -254,15 +254,8 @@ export default function createApp(settings: Partial<Settings>): App {
   }
 
   function renderToContainer(
-    element: unknown
-  ): unknown
-  function renderToContainer(
     element: unknown,
     controller: ClientController
-  ): unknown
-  function renderToContainer(
-    element: unknown,
-    controller?: ClientController
   ): unknown {
     if (controller) {
       saveControllerToCache(controller)
