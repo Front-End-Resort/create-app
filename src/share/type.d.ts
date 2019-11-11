@@ -91,7 +91,7 @@ export interface HistoryLocation extends ILWithBQ {
 
 export interface Loader {
   <C extends Controller>(
-    controller: ControllerConstructor | LoadController | string,
+    controller: ControllerConstructor | LoadController,
     location?: HistoryLocation,
     context?: Context
   ): ControllerConstructor | Promise<ControllerConstructor>
