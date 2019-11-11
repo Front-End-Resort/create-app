@@ -18,14 +18,14 @@ export interface Route {
   keys?: pathToRegexp.Key[]
   regexp?: RegExp
   path: pathToRegexp.Path
-  controller: ControllerConstructor | LoadController
+  controller: unknown
 }
 
 export interface IntactRoute {
   keys: pathToRegexp.Key[]
   regexp: RegExp
   path: pathToRegexp.Path
-  controller: ControllerConstructor | LoadController
+  controller: unknown
 }
 
 export interface Params {
@@ -35,7 +35,7 @@ export interface Params {
 export interface Matches<C> {
   path: pathToRegexp.Path
   params: Params
-  controller: ControllerConstructor | LoadController
+  controller: unknown
 }
 
 export interface Matcher {
@@ -91,7 +91,7 @@ export interface HistoryLocation extends ILWithBQ {
 
 export interface Loader {
   <C extends Controller>(
-    controller: ControllerConstructor | LoadController,
+    controller: unknown,
     location?: HistoryLocation,
     context?: Context
   ): ControllerConstructor | Promise<ControllerConstructor>
