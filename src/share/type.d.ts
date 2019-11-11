@@ -18,14 +18,14 @@ export interface Route {
   keys?: pathToRegexp.Key[]
   regexp?: RegExp
   path: pathToRegexp.Path
-  controller: ControllerConstructor | LoadController | string
+  controller: ControllerConstructor | LoadController
 }
 
 export interface IntactRoute {
   keys: pathToRegexp.Key[]
   regexp: RegExp
   path: pathToRegexp.Path
-  controller: ControllerConstructor | LoadController | string
+  controller: ControllerConstructor | LoadController
 }
 
 export interface Params {
@@ -35,7 +35,7 @@ export interface Params {
 export interface Matches<C> {
   path: pathToRegexp.Path
   params: Params
-  controller: ControllerConstructor | LoadController | string
+  controller: ControllerConstructor | LoadController
 }
 
 export interface Matcher {

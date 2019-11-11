@@ -14,7 +14,7 @@ export default function createMatcher(routes: Route[]): Matcher {
         continue
       }
       let params: Params = getParams(strMatches, route.keys)
-      let controller: ControllerConstructor | LoadController | string = route.controller
+      let controller: ControllerConstructor | LoadController = route.controller
       return {
         path: route.path,
         params,
