@@ -131,7 +131,7 @@ export default function createApp(settings: Partial<Settings>): App {
   function initController(
     controller: ServerController
   ): InitControllerReturn | Promise<InitControllerReturn> {
-    let component: unknown = controller.init()
+    let component = controller.init()
 
     if (component === null) {
       return { controller: controller }
@@ -145,7 +145,7 @@ export default function createApp(settings: Partial<Settings>): App {
           content: renderToString(component, controller ),
           controller: controller
         }
-      }) as Promise<InitControllerReturn>
+      })
     }
     return {
       content: renderToString(component, controller),

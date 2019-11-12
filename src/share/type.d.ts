@@ -64,7 +64,7 @@ export interface Settings extends HistoryOptions {
   loader: Loader
   cacheAmount?: number
   routes?: Route[]
-  viewEngine?: ViewEngine<unknown, Controller>
+  viewEngine?: ViewEngine<any, Controller>
 }
 
 export type Listener = Function
@@ -128,7 +128,7 @@ export interface Controller {
   loader?: Loader
   routes?: Route[]
   restore?(location?: HistoryLocation, context?: Context): unknown
-  init(): unknown
+  init(): unknown | Promise<unknown>
   render(): unknown
   destroy?(): void
   getContainer?(): HTMLElement | null
