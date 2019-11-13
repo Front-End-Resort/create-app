@@ -1,5 +1,5 @@
 import execSteps from './squences/execSteps'
-import createApp, { App, Context, Settings, CreateHistoryType, Route, ControllerConstructor, Loader, Controller, HistoryLocation } from '../src/client'
+import createApp, { App, Context, Settings, EntireSettings, CreateHistoryType, Route, ControllerConstructor, Loader, Controller, HistoryLocation } from '../src/client'
 import { getController, Home, List, Detail, Restore, NotFound } from './squences/classes'
 import { Step } from './squences/type'
 
@@ -330,7 +330,7 @@ const createTest = () => {
 }
 
 const describeTest: (type: CreateHistoryType) => void = (type) => {
-    const initApp: (settings: Partial<Settings>) => Promise<{}> = (settings) => {
+    const initApp: (settings: Settings) => Promise<{}> = (settings) => {
         // clear app and document.body
         if (app) {
             app.stop()

@@ -56,7 +56,7 @@ export interface ViewEngineClear {
   (container: Element): void
 }
 
-export interface Settings extends HistoryOptions {
+export interface EntireSettings extends HistoryOptions {
   container: string | HTMLElement
   basename: string
   context: Context
@@ -66,6 +66,8 @@ export interface Settings extends HistoryOptions {
   routes?: Route[]
   viewEngine?: ViewEngine<any, Controller>
 }
+
+export type Settings = Partial<EntireSettings>
 
 export type Listener = Function
 

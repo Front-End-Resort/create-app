@@ -2,7 +2,7 @@ import { History, LocationTypeMap } from 'create-history'
 import {
   Context,
   Callback,
-  Settings,
+  EntireSettings,
   Matcher,
   Loader,
   Route,

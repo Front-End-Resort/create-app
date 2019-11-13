@@ -20,6 +20,7 @@ import createMatcher from '../share/createMatcher'
 import defaultAppSettings from '../share/defaultSettings'
 import createController from './createController'
 import {
+  EntireSettings,
   Settings,
   Matcher,
   Context,
@@ -39,11 +40,11 @@ import {
   App
 } from './type'
 
-export function createHistory(settings?: Settings): HistoryWithBFOL<
+export function createHistory(settings?: EntireSettings): HistoryWithBFOL<
   LocationTypeMap['QUERY']['Base'],
   LocationTypeMap['QUERY']['Intact']
 >{
-  let finalAppSettings: Settings =
+  let finalAppSettings: EntireSettings =
     Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
   finalAppSettings = Object.assign(finalAppSettings, settings)
 
@@ -51,11 +52,11 @@ export function createHistory(settings?: Settings): HistoryWithBFOL<
   return useBeforeUnload(useQueries(chInit))(finalAppSettings)
 }
 
-export function createHistoryWithBasename(settings?: Settings): HistoryWithBFOL<
+export function createHistoryWithBasename(settings?: EntireSettings): HistoryWithBFOL<
   LocationTypeMap['BQ']['Base'],
   LocationTypeMap['BQ']['Intact']
 >{
-  let finalAppSettings: Settings =
+  let finalAppSettings: EntireSettings =
     Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
   finalAppSettings = Object.assign(finalAppSettings, settings)
 
@@ -63,8 +64,8 @@ export function createHistoryWithBasename(settings?: Settings): HistoryWithBFOL<
   return useBeforeUnload(useQueries(useBasename(chInit)))(finalAppSettings)
 }
 
-export default function createApp(settings: Partial<Settings>): App {
-  let finalAppSettings: Settings =
+export default function createApp(settings: Settings): App {
+  let finalAppSettings: EntireSettings =
     Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
 
   finalAppSettings = Object.assign(finalAppSettings, settings)

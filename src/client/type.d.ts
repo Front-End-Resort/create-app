@@ -10,6 +10,7 @@ import {
 import {
   Context,
   Callback,
+  EntireSettings,
   Settings,
   ControllerConstructor,
   Listener,
