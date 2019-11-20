@@ -15,7 +15,7 @@ import CreateHistoryMap, {
   HistoryWithBFOL
 } from 'create-history'
 import defaultViewEngine from './viewEngine'
-import { createCache, createMap, ReqError } from '../share/util'
+import { createCache, createMap, ReqError, isPromise } from '../share/util'
 import createMatcher from '../share/createMatcher'
 import defaultAppSettings from '../share/defaultSettings'
 import createController from './createController'
@@ -147,7 +147,7 @@ export default function createApp(settings: Settings): App {
     let iController: ControllerConstructor | Promise<ControllerConstructor> =
       loader(controller, finalLocation, context)
 
-    if (Promise.resolve(iController) == iController) {
+    if (isPromise(iController)) {
       return (<Promise<ControllerConstructor>>iController).then(initController)
     } else {
       return initController(<ControllerConstructor>iController)
@@ -241,7 +241,7 @@ export default function createApp(settings: Settings): App {
         return null
       }
 
-      if (Promise.resolve(element) == element) {
+      if (isPromise(element)) {
         return (element as Promise<unknown>).then(result => {
           if (currentLocation !== location || result == null) {
             return null
@@ -331,7 +331,7 @@ export default function createApp(settings: Settings): App {
     
     let listener: (location: ILWithBQ | ILWithQuery) => void = location => {
       let result = render(location)
-      if (Promise.resolve(result) == result) {
+      if (isPromise(result)) {
         (result as Promise<unknown>).then(() => {
           publish(location)
         })

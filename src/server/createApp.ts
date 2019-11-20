@@ -9,7 +9,7 @@ import {
   History,
   LocationTypeMap
 } from 'create-history'
-import { createMap, ReqError } from '../share/util'
+import { createMap, ReqError, isPromise } from '../share/util'
 import defaultViewEngine from './viewEngine'
 import createMatcher from '../share/createMatcher'
 import defaultAppSettings from '../share/defaultSettings'
@@ -109,7 +109,7 @@ export default function createApp(settings: Settings): App {
 
     try {
       let controller = fetchController(requestPath, injectContext)
-      if (Promise.resolve(controller) == controller) {
+      if (isPromise(controller)) {
         result = (<Promise<ServerController>>controller).then(initController)
       } else {
         result = initController(controller as ServerController)
@@ -118,7 +118,7 @@ export default function createApp(settings: Settings): App {
       callback && callback(error)
       return Promise.reject(error)
     }
-    if (Promise.resolve(result) == result) {
+    if (isPromise(result)) {
       if (callback) {
         let cb: Function = callback
         result.then(result => cb(null, result), reason => cb(reason))
@@ -137,7 +137,7 @@ export default function createApp(settings: Settings): App {
     if (component === null) {
       return { controller: controller }
     }
-    if (Promise.resolve(component) == component) {
+    if (isPromise(component)) {
       return (component as Promise<unknown>).then((component) => {
         if (component == null) {
           return { controller: controller }
@@ -183,7 +183,7 @@ export default function createApp(settings: Settings): App {
     let iController: ControllerConstructor | Promise<ControllerConstructor> =
       loader(controller, finalLocation, finalContext)
 
-    if (Promise.resolve(iController) == iController) {
+    if (isPromise(iController)) {
       return (<Promise<ControllerConstructor>>iController).then(iController => {
         let Wrapper = wrapController(iController)
         return createController(Wrapper, finalLocation, finalContext)
