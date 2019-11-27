@@ -489,6 +489,6 @@ describe('createApp-client', () => {
     })
 
     describe('feature: pushState history', () => {
-        describeTest('createBrowserHistory')
+        describeTest('createHistory')
     })
 })
