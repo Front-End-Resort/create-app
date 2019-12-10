@@ -42,10 +42,10 @@
     "ts-jest": "^23.0.1",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.7.3"
   },
   "dependencies": {
-    "create-history": "^2.0.5",
+    "create-history": "^2.0.6",
     "path-to-regexp": "^1.7.0"
   }
 }

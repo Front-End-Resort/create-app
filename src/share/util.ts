@@ -86,6 +86,6 @@ export function createMap<K, V>(): AppMap<K, V> {
   return { get, set, has, remove }
 }
 
-export function isPromise(value: any): value is Promise<unknown> {
-  return !!value && typeof value.then === 'function'
+export function isPromise(value: unknown): value is Promise<unknown> {
+  return !!value && typeof (value as { then: unknown }).then === 'function'
 }
