@@ -40,7 +40,7 @@ export interface Render {
   ): InitControllerReturn | Promise<InitControllerReturn>
   (
     requestPath: string,
-    injectContext: Context | null
+    injectContext: Partial<Context> | null
   ): InitControllerReturn | Promise<InitControllerReturn>
   (
     requestPath: string,
@@ -48,12 +48,12 @@ export interface Render {
   ): InitControllerReturn | Promise<InitControllerReturn>
   (
     requestPath: string,
-    injectContext: Context | null,
+    injectContext: Partial<Context> | null,
     callback: Callback
   ): InitControllerReturn | Promise<InitControllerReturn>
   (
     requestPath: string,
-    injectContext?: Context | null | Callback,
+    injectContext?: Partial<Context> | null | Callback,
     callback?: Callback
   ): InitControllerReturn | Promise<InitControllerReturn>
 }

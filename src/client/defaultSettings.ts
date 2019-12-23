@@ -1,7 +1,30 @@
+import { EntireSettings, ControllerConstructor } from '../share/type'
+
+export const isClient: boolean = typeof window !== 'undefined'
+export const isServer: boolean = !isClient
+
+const defaultAppSettings: EntireSettings = {
+	container: '#container',
+	basename: '',
+	context: {
+		isServer,
+		isClient,
+		prevLocation: null,
+		location: {}
+	},
+	type: 'createHashHistory',
+	loader: (value: unknown) => value as ControllerConstructor,
+	routes: [],
+	viewEngine: {
+		render
+	}
+}
+
+export default defaultAppSettings
+
 /**
  * default view engine for client
  */
-import { ViewEngine } from '../share/type'
 import { ClientController } from './type'
 
 function render(
@@ -32,9 +55,3 @@ function render(
 	}
 	return container
 }
-
-const viewEngine: ViewEngine<string, ClientController> = {
-	render
-}
-
-export default viewEngine

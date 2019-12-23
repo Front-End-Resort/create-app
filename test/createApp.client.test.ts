@@ -338,16 +338,15 @@ const describeTest: (type: CreateHistoryType) => void = (type) => {
             window.location.hash = ''
         }
     
-        context = {
-            location: {}
-        }
     
         app = createApp({
             container: 'body',
             basename: '/abc',
             ...settings,
             type,
-            context,
+            context: {
+                location: {}
+            }
         })
         return new Promise(resolve => {
             // do not match current location

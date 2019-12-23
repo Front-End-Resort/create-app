@@ -10,9 +10,8 @@ import {
   LocationTypeMap
 } from 'create-history'
 import { createMap, ReqError, isPromise } from '../share/util'
-import defaultViewEngine from './viewEngine'
 import createMatcher from '../share/createMatcher'
-import defaultAppSettings from '../share/defaultSettings'
+import defaultAppSettings from './defaultSettings'
 import createController from './createController'
 import {
   EntireSettings,
@@ -36,9 +35,13 @@ export function createHistory(settings?: EntireSettings): History<
   LocationTypeMap['QUERY']['Base'],
   LocationTypeMap['QUERY']['Intact']
 > {
-  let finalAppSettings: EntireSettings =
-    Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
-  finalAppSettings = Object.assign(finalAppSettings, settings)
+  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings?.context)
+  const finalAppSettings: EntireSettings = Object.assign(
+    {},
+    defaultAppSettings,
+    settings,
+    { context: finalContext }
+  )
 
   let chInit: CreateHistory<'NORMAL'> = createMemoryHistory
   return useQueries(chInit)(finalAppSettings)
@@ -48,31 +51,33 @@ export function createHistoryWithBasename(settings?: EntireSettings): History<
   LocationTypeMap['BQ']['Base'],
   LocationTypeMap['BQ']['Intact']
 >{
-  let finalAppSettings: EntireSettings =
-    Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
-  finalAppSettings = Object.assign(finalAppSettings, settings)
+  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings?.context)
+  const finalAppSettings: EntireSettings = Object.assign(
+    {},
+    defaultAppSettings,
+    settings,
+    { context: finalContext }
+  )
 
   let chInit: CreateHistory<'NORMAL'> = createMemoryHistory
   return useQueries(useBasename(chInit))(finalAppSettings)
 }
 
 export default function createApp(settings: Settings): App {
-  let finalAppSettings: EntireSettings =
-    Object.assign({ viewEngine: defaultViewEngine }, defaultAppSettings)
+  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings.context)
+  const finalAppSettings: EntireSettings = Object.assign(
+    {},
+    defaultAppSettings,
+    settings,
+    { context: finalContext }
+  )
 
-  finalAppSettings = Object.assign(finalAppSettings, settings)
-
-  let {
+  const {
     routes,
     viewEngine,
     loader,
     context
   } = finalAppSettings
-
-  context = {
-    ...finalAppSettings.context,
-    ...settings.context,
-  }
 
   let matcher = createMatcher(routes || [])
   let history = finalAppSettings.basename

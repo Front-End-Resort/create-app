@@ -63,21 +63,30 @@ export interface EntireSettings extends HistoryOptions {
   type: CreateHistoryType
   loader: Loader
   cacheAmount?: number
-  routes?: Route[]
-  viewEngine?: ViewEngine<any, Controller>
+  routes: Route[]
+  viewEngine: ViewEngine<any, Controller>
 }
 
-export type Settings = Partial<EntireSettings>
+export type Settings = Partial<{
+  container: string | HTMLElement
+  basename: string
+  context: Partial<Context>
+  type: CreateHistoryType
+  loader: Loader
+  cacheAmount?: number
+  routes: Route[]
+  viewEngine: ViewEngine<any, Controller>
+}>
 
 export type Listener = Function
 
 export type Callback = Function
 
 export interface Context {
-  isClient?: boolean
-  isServer?: boolean
-  prevLocation?: object | null
-  location?: HistoryBaseLocation
+  isClient: boolean
+  isServer: boolean
+  prevLocation: object | null
+  location: HistoryBaseLocation
   [propName: string]: unknown
 }
 
