@@ -1,4 +1,5 @@
 import { EntireSettings, ControllerConstructor } from '../share/type'
+import { ServerController } from './type'
 
 export const isClient: boolean = typeof window !== 'undefined'
 export const isServer: boolean = !isClient
@@ -21,11 +22,6 @@ const defaultAppSettings: EntireSettings = {
 }
 
 export default defaultAppSettings
-
-/**
- * default view engine for server
- */
-import { ServerController } from './type'
 
 interface ToString {
   toString(): string
