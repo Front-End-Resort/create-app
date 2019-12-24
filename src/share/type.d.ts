@@ -67,7 +67,7 @@ export interface EntireSettings extends HistoryOptions {
   viewEngine: ViewEngine<any, Controller>
 }
 
-export type Settings = Partial<{
+export type Settings = HistoryOptions & Partial<{
   container: string | HTMLElement
   basename: string
   context: Partial<Context>
