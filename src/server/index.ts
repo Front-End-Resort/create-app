@@ -1,37 +1,71 @@
+///////////////////////////////////////////////////////////////////////////////
+// FUNCTIONS
+///////////////////////////////////////////////////////////////////////////////
 import createApp from './createApp'
-
 export default createApp
+export * from './createApp'
 
-export { createHistory } from './createApp'
+///////////////////////////////////////////////////////////////////////////////
+// TYPES
+///////////////////////////////////////////////////////////////////////////////
+export * from '../index'
 
-export {
-  App,
-  ServerController
-} from './type'
-
-export {
-  Route,
-  EntireSettings,
-  Settings,
-  CreateHistoryType,
-  Params,
-  Matches,
-  Matcher,
-  ViewEngine,
-  ViewEngineRender,
-  ViewEngineClear,
-  Loader,
-  LoadController,
+import type { History, LocationTypeMap } from 'create-history'
+import type {
   Context,
-  HistoryBaseLocation,
+  Callback,
   HistoryLocation,
-  Controller,
-  ControllerConstructor,
-  Cache,
-  CacheStorage,
-  AppMap
-} from '../share/type'
+  Controller
+} from '../index'
 
-export {
-  Actions
-} from 'create-history'
+export interface ServerController extends Controller {
+  location: HistoryLocation
+  context: Context
+}
+
+export interface ServerControllerConstructor {
+  new(
+    location: HistoryLocation,
+    context: Context
+  ): ServerController
+}
+
+export interface App {
+  render: Render
+  history: History<
+    LocationTypeMap['BQ']['Base'],
+    LocationTypeMap['BQ']['Intact']
+  > | History<
+    LocationTypeMap['QUERY']['Base'],
+    LocationTypeMap['QUERY']['Intact']
+  >
+}
+
+export interface Render {
+  (
+    requestPath: string
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  (
+    requestPath: string,
+    injectContext: Partial<Context> | null
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  (
+    requestPath: string,
+    callback: Callback
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  (
+    requestPath: string,
+    injectContext: Partial<Context> | null,
+    callback: Callback
+  ): InitControllerReturn | Promise<InitControllerReturn>
+  (
+    requestPath: string,
+    injectContext?: Partial<Context> | null | Callback,
+    callback?: Callback
+  ): InitControllerReturn | Promise<InitControllerReturn>
+}
+
+export interface InitControllerReturn {
+  content?: unknown
+  controller: Controller
+}

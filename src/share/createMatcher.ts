@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp'
-import * as _ from './util'
-import { Route, IntactRoute, Matcher, Params } from './type'
+import type { Key } from 'path-to-regexp'
+import type { Route, IntactRoute, Matcher, Params } from '../index'
 
 export default function createMatcher(routes: Route[]): Matcher {
   const finalRoutes: IntactRoute[] = routes.map(createRoute)
@@ -30,7 +30,7 @@ export default function createMatcher(routes: Route[]): Matcher {
 function createRoute(route: Route): IntactRoute {
   let finalRoute: Route = Object.assign({}, route)
   finalRoute.keys = []
-  let keys: pathToRegexp.Key[] = finalRoute.keys
+  let keys: Key[] = finalRoute.keys
   let regexp = pathToRegexp(finalRoute.path, keys)
   let intactRoute: IntactRoute = Object.assign({ keys, regexp }, finalRoute)
   return intactRoute
@@ -38,7 +38,7 @@ function createRoute(route: Route): IntactRoute {
 
 function getParams(
   matches: RegExpExecArray,
-  keys: pathToRegexp.Key[]
+  keys: Key[]
 ): Params {
   let params: Params = {}
   for (let i = 1, len = matches.length; i < len; i++) {

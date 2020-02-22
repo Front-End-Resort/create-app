@@ -1,5 +1,9 @@
-import { HistoryLocation, Context } from '../share/type'
-import { ClientController, ClientControllerConstructor } from './type'
+import {
+  ClientController,
+  ClientControllerConstructor,
+  HistoryLocation,
+  Context
+} from "./index";
 
 export default function createController(
   c: ClientControllerConstructor,

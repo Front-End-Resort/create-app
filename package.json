@@ -7,8 +7,7 @@
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watchAll",
     "prebuild": "rimraf lib",
-    "build": "tsc",
-    "postbuild": "ts-node move.ts"
+    "build": "tsc"
   },
   "files": [
     "server",
@@ -36,16 +35,14 @@
     "@types/fs-extra": "^8.0.0",
     "@types/jest": "^23.0.1",
     "@types/node": "^12.6.9",
-    "fs-extra": "^8.1.0",
     "jest": "^23.0.1",
     "rimraf": "^2.6.3",
     "ts-jest": "^23.0.1",
     "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.8.2"
   },
   "dependencies": {
-    "create-history": "^2.0.6",
+    "create-history": "^2.0.7",
     "path-to-regexp": "^1.7.0"
   }
 }

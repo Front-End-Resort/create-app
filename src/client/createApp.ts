@@ -1,24 +1,28 @@
-/**
- * createApp at client
- */
 import CreateHistoryMap, {
   useBasename,
   useBeforeUnload,
   useQueries,
-  CreateHistory,
+} from 'create-history'
+import createMatcher from '../share/createMatcher'
+import defaultAppSettings from './defaultSettings'
+import createController from './createController'
+import {
+  createCache,
+  createMap,
+  ReqError,
+  isPromise
+} from '../share/util'
+import type {
   ILWithBQ,
   BLWithBQ,
   History,
   ILWithQuery,
   BLWithQuery,
+  CreateHistory,
   LocationTypeMap,
   HistoryWithBFOL
 } from 'create-history'
-import { createCache, createMap, ReqError, isPromise } from '../share/util'
-import createMatcher from '../share/createMatcher'
-import defaultAppSettings from './defaultSettings'
-import createController from './createController'
-import {
+import type {
   EntireSettings,
   Settings,
   Matcher,
@@ -29,21 +33,23 @@ import {
   Listener,
   Loader,
   Route,
-  Callback
-} from '../share/type'
-import {
+  Callback,
   InitController,
   Stop,
   ClientController,
   ClientControllerConstructor,
   App
-} from './type'
+} from './index'
 
 export function createHistory(settings?: EntireSettings): HistoryWithBFOL<
   LocationTypeMap['QUERY']['Base'],
   LocationTypeMap['QUERY']['Intact']
 >{
-  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings?.context)
+  const finalContext: Context = Object.assign(
+    {},
+    defaultAppSettings.context,
+    settings?.context
+  )
   const finalAppSettings: EntireSettings = Object.assign(
     {},
     defaultAppSettings,
@@ -55,11 +61,17 @@ export function createHistory(settings?: EntireSettings): HistoryWithBFOL<
   return useBeforeUnload(useQueries(chInit))(finalAppSettings)
 }
 
-export function createHistoryWithBasename(settings?: EntireSettings): HistoryWithBFOL<
+export function createHistoryWithBasename(
+  settings?: EntireSettings
+): HistoryWithBFOL<
   LocationTypeMap['BQ']['Base'],
   LocationTypeMap['BQ']['Intact']
 >{
-  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings?.context)
+  const finalContext: Context = Object.assign(
+    {},
+    defaultAppSettings.context,
+    settings?.context
+  )
   const finalAppSettings: EntireSettings = Object.assign(
     {},
     defaultAppSettings,
@@ -72,7 +84,11 @@ export function createHistoryWithBasename(settings?: EntireSettings): HistoryWit
 }
 
 export default function createApp(settings: Settings): App {
-  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings?.context)
+  const finalContext: Context = Object.assign(
+    {},
+    defaultAppSettings.context,
+    settings?.context
+  )
   const finalAppSettings: EntireSettings = Object.assign(
     {},
     defaultAppSettings,
@@ -105,7 +121,9 @@ export default function createApp(settings: Settings): App {
     cache.set(controller.location.raw, controller)
   }
 
-  function getControllerFromCache(location: HistoryLocation): ClientController {
+  function getControllerFromCache(
+    location: HistoryLocation
+  ): ClientController {
     return cache.get(location.raw)
   }
 
@@ -134,7 +152,10 @@ export default function createApp(settings: Settings): App {
     let matches = matcher(location.pathname)
 
     if (!matches) {
-      throw new ReqError(`Did not match any route with pathname:${location.pathname}`, 404)
+      throw new ReqError(
+        `Did not match any route with pathname:${location.pathname}`,
+        404
+      )
     }
 
     let { path, params, controller } = matches
@@ -149,19 +170,27 @@ export default function createApp(settings: Settings): App {
     currentLocation = finalLocation
 
     let initController: InitController = createInitController(finalLocation)
-    let iController: ControllerConstructor | Promise<ControllerConstructor> =
-      loader(controller, finalLocation, context)
+    let iController: ControllerConstructor | Promise<ControllerConstructor>
+      = loader(controller, finalLocation, context)
 
     if (isPromise(iController)) {
-      return (<Promise<ControllerConstructor>>iController).then(initController)
+      return (
+        (<Promise<ControllerConstructor>>iController)
+          .then(initController)
+      )
     } else {
       return initController(<ControllerConstructor>iController)
     }
   }
 
-  let controllers = createMap<ControllerConstructor, ClientControllerConstructor>()
+  let controllers = createMap<
+    ControllerConstructor,
+    ClientControllerConstructor
+  >()
 
-  function wrapController(IController: ControllerConstructor): ClientControllerConstructor {
+  function wrapController(
+    IController: ControllerConstructor
+  ): ClientControllerConstructor {
     if (controllers.has(IController)) {
       return controllers.get(IController) as ClientControllerConstructor
     }
@@ -234,7 +263,9 @@ export default function createApp(settings: Settings): App {
         controller.location = location
         controller.context = context
       } else {
-        let FinalController = wrapController(iController as ControllerConstructor)
+        let FinalController = wrapController(
+          iController as ControllerConstructor
+        )
         controller = currentController =
           createController(FinalController, location, context)
 

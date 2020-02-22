@@ -1,5 +1,8 @@
-import { EntireSettings, ControllerConstructor } from '../share/type'
-import { ClientController } from './type'
+import type {
+  ClientController,
+  EntireSettings,
+  ControllerConstructor
+} from "./index";
 
 export const isClient: boolean = typeof window !== 'undefined'
 export const isServer: boolean = !isClient

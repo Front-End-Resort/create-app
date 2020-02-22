@@ -1,10 +1,9 @@
-// util
-import {
+import type {
   CacheStorage,
   Cache,
   MapItem,
   AppMap
-} from './type'
+} from '../index'
 
 export class ReqError extends Error {
   status?: number

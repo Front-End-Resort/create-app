@@ -4,38 +4,46 @@
 import {
   useBasename,
   useQueries,
-  CreateHistory,
   createMemoryHistory,
-  History,
-  LocationTypeMap
 } from 'create-history'
-import { createMap, ReqError, isPromise } from '../share/util'
 import createMatcher from '../share/createMatcher'
 import defaultAppSettings from './defaultSettings'
 import createController from './createController'
 import {
-  EntireSettings,
-  Settings,
-  Context,
-  ControllerConstructor,
-  HistoryLocation,
-  Matcher,
-  Loader,
-  Route,
-  Callback
-} from '../share/type'
-import {
+  createMap,
+  ReqError,
+  isPromise
+} from '../share/util'
+import type {
+  History,
+  CreateHistory,
+  LocationTypeMap
+} from 'create-history'
+import type {
   App,
-  InitControllerReturn,
+  Route,
+  Loader,
+  Matcher,
+  Context,
+  Callback,
+  Settings,
+  EntireSettings,
+  HistoryLocation,
   ServerController,
+  InitControllerReturn,
+  ControllerConstructor,
   ServerControllerConstructor
-} from './type'
+} from './index'
 
 export function createHistory(settings?: EntireSettings): History<
   LocationTypeMap['QUERY']['Base'],
   LocationTypeMap['QUERY']['Intact']
 > {
-  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings?.context)
+  const finalContext: Context = Object.assign(
+    {},
+    defaultAppSettings.context,
+    settings?.context
+  )
   const finalAppSettings: EntireSettings = Object.assign(
     {},
     defaultAppSettings,
@@ -51,7 +59,11 @@ export function createHistoryWithBasename(settings?: EntireSettings): History<
   LocationTypeMap['BQ']['Base'],
   LocationTypeMap['BQ']['Intact']
 >{
-  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings?.context)
+  const finalContext: Context = Object.assign(
+    {},
+    defaultAppSettings.context,
+    settings?.context
+  )
   const finalAppSettings: EntireSettings = Object.assign(
     {},
     defaultAppSettings,
@@ -64,7 +76,11 @@ export function createHistoryWithBasename(settings?: EntireSettings): History<
 }
 
 export default function createApp(settings: Settings): App {
-  const finalContext: Context = Object.assign({}, defaultAppSettings.context, settings.context)
+  const finalContext: Context = Object.assign(
+    {},
+    defaultAppSettings.context,
+    settings.context
+  )
   const finalAppSettings: EntireSettings = Object.assign(
     {},
     defaultAppSettings,
@@ -105,7 +121,8 @@ export default function createApp(settings: Settings): App {
     injectContext?: Context | null | Callback,
     callback?: Callback
   ): InitControllerReturn | Promise<InitControllerReturn> {
-    let result: InitControllerReturn | Promise<InitControllerReturn> | null = null
+    let result: InitControllerReturn | Promise<InitControllerReturn> | null
+      = null
 
     if (typeof injectContext === 'function') {
       callback = injectContext
@@ -189,10 +206,13 @@ export default function createApp(settings: Settings): App {
       loader(controller, finalLocation, finalContext)
 
     if (isPromise(iController)) {
-      return (<Promise<ControllerConstructor>>iController).then(iController => {
-        let Wrapper = wrapController(iController)
-        return createController(Wrapper, finalLocation, finalContext)
-      })
+      return (
+        (<Promise<ControllerConstructor>>iController)
+          .then(iController => {
+            let Wrapper = wrapController(iController)
+            return createController(Wrapper, finalLocation, finalContext)
+          })
+      )
     }
 
     let Wrapper = wrapController(<ControllerConstructor>iController)
@@ -200,9 +220,14 @@ export default function createApp(settings: Settings): App {
   }
 
 
-  let controllers = createMap<ControllerConstructor, ServerControllerConstructor>()
+  let controllers = createMap<
+    ControllerConstructor,
+    ServerControllerConstructor
+  >()
 
-  function wrapController(iController: ControllerConstructor): ServerControllerConstructor {
+  function wrapController(
+    iController: ControllerConstructor
+  ): ServerControllerConstructor {
     if (controllers.has(iController)) {
       return controllers.get(iController) as ServerControllerConstructor
     }

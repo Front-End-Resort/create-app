@@ -1,32 +1,35 @@
-/*
-  key/value configs
-*/
-import createHistoryMap, {
+///////////////////////////////////////////////////////////////////////////////
+// MODULES
+///////////////////////////////////////////////////////////////////////////////
+export * as client from './client'
+export * as server from './server'
+
+///////////////////////////////////////////////////////////////////////////////
+// TYPES
+///////////////////////////////////////////////////////////////////////////////
+import type { Key, Path } from 'path-to-regexp'
+import type {
   History,
   HistoryOptions,
   ILWithBQ,
   BLWithBQ,
-  CreateHistory,
-  LocationTypeMap,
-  HistoryWithBFOL,
   BLWithQuery,
   ILWithQuery
 } from 'create-history'
-import pathToRegexp from 'path-to-regexp'
 
-export type CreateHistoryType = keyof typeof createHistoryMap
+export type CreateHistoryType = 'createHistory' | 'createHashHistory' | 'createMemoryHistory'
 
 export interface Route {
-  keys?: pathToRegexp.Key[]
+  keys?: Key[]
   regexp?: RegExp
-  path: pathToRegexp.Path
+  path: Path
   controller: unknown
 }
 
 export interface IntactRoute {
-  keys: pathToRegexp.Key[]
+  keys: Key[]
   regexp: RegExp
-  path: pathToRegexp.Path
+  path: Path
   controller: unknown
 }
 
@@ -35,7 +38,7 @@ export interface Params {
 }
 
 export interface Matches<C> {
-  path: pathToRegexp.Path
+  path: Path
   params: Params
   controller: unknown
 }
@@ -92,13 +95,13 @@ export interface Context {
 
 export interface HistoryBaseLocation extends BLWithBQ {
   raw?: string
-  pattern?: pathToRegexp.Path
+  pattern?: Path
   params?: Params
 }
 
 export interface HistoryLocation extends ILWithBQ {
   raw: string
-  pattern: pathToRegexp.Path
+  pattern: Path
   params: Params
 }
 
