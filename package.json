@@ -7,7 +7,8 @@
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watchAll",
     "prebuild": "rimraf lib",
-    "build": "tsc"
+    "build": "tsc",
+    "rmnm": "rimraf node_modules"
   },
   "files": [
     "server",
@@ -42,7 +43,7 @@
     "typescript": "^3.8.2"
   },
   "dependencies": {
-    "create-history": "^2.0.7",
+    "create-history": "^2.0.9",
     "path-to-regexp": "^1.7.0"
   }
 }
