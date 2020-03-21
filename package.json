@@ -1,6 +1,6 @@
 {
   "name": "create-app",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "description": "configuring once, rendering both client and server.",
   "main": "index.js",
   "scripts": {
