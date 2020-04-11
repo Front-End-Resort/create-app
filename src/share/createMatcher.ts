@@ -43,7 +43,7 @@ function getParams(
   let params: Params = {}
   for (let i = 1, len = matches.length; i < len; i++) {
     let key = keys[i - 1]
-    if (key) {
+    if (key && matches[i]) {
       if (typeof matches[i] === 'string') {
         params[key.name] = decodeURIComponent(matches[i])
       } else {
