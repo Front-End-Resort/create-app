@@ -3,7 +3,7 @@ import {
   ClientControllerConstructor,
   HistoryLocation,
   Context
-} from "./index";
+} from "./index"
 
 export default function createController(
   c: ClientControllerConstructor,
