@@ -35,6 +35,6 @@ describe('createMap', () => {
 
     map.remove(my_key)
     expect(map.has(my_key)).toBe(false)
-    expect(map.get(my_key)).toBe(undefined)
+    expect(map.get(my_key)).toBe(void 0)
   })
 })

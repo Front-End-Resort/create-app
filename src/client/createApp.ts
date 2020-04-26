@@ -362,7 +362,7 @@ export default function createApp(settings: Settings): App {
   ): Stop | null {
     if (typeof callback === 'boolean') {
       shouldRenderWithCurrentLocation = callback
-      callback = undefined
+      callback = void 0
     }
     
     let listener: (location: ILWithBQ | ILWithQuery) => void = location => {
