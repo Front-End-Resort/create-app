@@ -3,12 +3,12 @@ import type {
   ServerControllerConstructor,
   HistoryLocation,
   Context
-} from "./index";
+} from "./index"
 
 export default function createController(
   c: ServerControllerConstructor,
   location: HistoryLocation,
   context: Context
 ): ServerController {
-  return new c(location, context);
+  return new c(location, context)
 }

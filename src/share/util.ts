@@ -64,7 +64,7 @@ export function createMap<K, V>(): AppMap<K, V> {
 
   function get(key: K): V | undefined {
     let result = find(key)
-    return result.length ? result[0].value : undefined
+    return result.length ? result[0].value : void 0
   }
 
   function set(key: K, value: V): void {
