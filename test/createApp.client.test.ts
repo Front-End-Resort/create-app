@@ -1,7 +1,8 @@
 import execSteps from './squences/execSteps'
-import createApp, { App, Context, Settings, EntireSettings, CreateHistoryType, Route, ControllerConstructor, Loader, Controller, HistoryLocation } from '../src/client'
+import createApp from '../src/client'
 import { getController, Home, List, Detail, Restore, NotFound } from './squences/classes'
-import { Step } from './squences/type'
+import type { App, Context, Settings, EntireSettings, CreateHistoryType, Route, ControllerConstructor, Loader, Controller, HistoryLocation } from '../src/client'
+import type { Step } from './squences/type'
 
 let app: App
 let context: Context

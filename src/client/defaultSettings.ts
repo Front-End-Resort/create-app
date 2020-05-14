@@ -2,7 +2,7 @@ import type {
   ClientController,
   EntireSettings,
   ControllerConstructor
-} from "./index";
+} from "./index"
 
 export const isClient: boolean = typeof window !== 'undefined'
 export const isServer: boolean = !isClient

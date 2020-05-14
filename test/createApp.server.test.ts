@@ -1,5 +1,6 @@
 import { Home, List, Detail, NotFound } from './squences/classes'
-import createApp, { App, EntireSettings, ControllerConstructor, Loader } from '../src/server';
+import createApp from '../src/server'
+import type { App, EntireSettings, ControllerConstructor, Loader } from '../src/server'
 
 let app: App
 
