@@ -1,5 +1,5 @@
-# create-app
-configuring once, rendering both client and server.
+# Create App
+Configuring once, rendering both client and server.
 
 ## Installation
 
