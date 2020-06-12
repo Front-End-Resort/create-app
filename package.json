@@ -1,6 +1,6 @@
 {
   "name": "create-app",
-  "version": "2.0.17",
+  "version": "2.1.0",
   "description": "configuring once, rendering both client and server.",
   "main": "index.js",
   "scripts": {
@@ -43,7 +43,7 @@
     "typescript": "^3.9.2"
   },
   "dependencies": {
-    "create-history": "^2.0.11",
+    "create-history": "^2.1.0",
     "path-to-regexp": "^1.7.0"
   }
 }
