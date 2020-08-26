@@ -1,13 +1,13 @@
-import { HistoryBaseLocation } from '../../src/client'
+import { HistoryBaseLocation } from "../../src/client";
 
 export interface Step {
-  (location?: HistoryBaseLocation): void
+  (location?: HistoryBaseLocation): void;
 }
 
 export interface Done {
-  (...args: unknown[]): void
+  (...args: unknown[]): void;
 }
 
 export interface Subscribe {
-  (next: Function): Function
+  (next: Function): Function;
 }

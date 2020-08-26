@@ -1,14 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 // FUNCTIONS
 ///////////////////////////////////////////////////////////////////////////////
-import createApp from './createApp'
-export default createApp
-export * from './createApp'
+import createApp from "./createApp";
+export default createApp;
+export * from "./createApp";
 
 ///////////////////////////////////////////////////////////////////////////////
 // TYPES
 ///////////////////////////////////////////////////////////////////////////////
-export * from '../index'
+export * from "../index";
 
 import type {
   History,
@@ -17,8 +17,8 @@ import type {
   HistoryWithBFOL,
   LocationTypeMap,
   BLWithQuery,
-  ILWithQuery
-} from 'create-history'
+  ILWithQuery,
+} from "create-history";
 import type {
   Context,
   Callback,
@@ -28,60 +28,54 @@ import type {
   Matcher,
   Route,
   Loader,
-  Controller
-} from '../index'
+  Controller,
+} from "../index";
 
 export interface ClientController extends Controller {
-  location: HistoryLocation
-  context: Context
-  history: History<BLWithBQ, ILWithBQ> | History<BLWithQuery, ILWithQuery>
-  matcher: Matcher
-  loader: Loader
-  routes: Route[]
+  location: HistoryLocation;
+  context: Context;
+  history: History<BLWithBQ, ILWithBQ> | History<BLWithQuery, ILWithQuery>;
+  matcher: Matcher;
+  loader: Loader;
+  routes: Route[];
 }
 
 export interface ClientControllerConstructor {
-  new(
-    location: HistoryLocation,
-    context: Context
-  ): ClientController
+  new (location: HistoryLocation, context: Context): ClientController;
 }
 
 export interface Render {
-  (targetPath: string | ILWithBQ | ILWithQuery): unknown
+  (targetPath: string | ILWithBQ | ILWithQuery): unknown;
 }
 
 export interface Start {
-  (
-    callback?: Callback,
-    shouldRenderWithCurrentLocation?: boolean
-  ): Stop | null
+  (callback?: Callback, shouldRenderWithCurrentLocation?: boolean): Stop | null;
 }
 
 export interface Stop {
-  (): void
+  (): void;
 }
 
 export interface Subscribe {
-  (listener: Listener): () => void
+  (listener: Listener): () => void;
 }
 
 export interface App {
-  start: Start
-  stop: Stop
-  render: Render
-  history: HistoryWithBFOL<
-      LocationTypeMap['BQ']['Base'],
-      LocationTypeMap['BQ']['Intact']
-    > | HistoryWithBFOL<
-      LocationTypeMap['QUERY']['Base'],
-      LocationTypeMap['QUERY']['Intact']
-    >
-  subscribe: Subscribe
+  start: Start;
+  stop: Stop;
+  render: Render;
+  history:
+    | HistoryWithBFOL<
+        LocationTypeMap["BQ"]["Base"],
+        LocationTypeMap["BQ"]["Intact"]
+      >
+    | HistoryWithBFOL<
+        LocationTypeMap["QUERY"]["Base"],
+        LocationTypeMap["QUERY"]["Intact"]
+      >;
+  subscribe: Subscribe;
 }
 
 export interface InitController {
-  (
-    c: ControllerConstructor | Promise<ControllerConstructor>
-  ): unknown
+  (c: ControllerConstructor | Promise<ControllerConstructor>): unknown;
 }

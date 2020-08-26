@@ -1,81 +1,81 @@
-import { Controller } from '../../src/client'
-export let getController = () => controller
+import { Controller } from "../../src/client";
+export let getController = () => controller;
 
-let controller: Controller
+let controller: Controller;
 
 export class Home implements Controller {
   constructor() {
-    controller = this
+    controller = this;
   }
   init() {
-    return this.render()
+    return this.render();
   }
   render() {
-    return 'home'
+    return "home";
   }
   restore() {
-    controller = this
-    return this.render()
+    controller = this;
+    return this.render();
   }
 }
 
 export class List implements Controller {
   constructor() {
-    controller = this
+    controller = this;
   }
   init() {
     return new Promise<string>((resolve, _) => {
       setTimeout(() => {
-        resolve(this.render())
-      }, 50)
-    })
+        resolve(this.render());
+      }, 50);
+    });
   }
   render() {
-    return 'list'
+    return "list";
   }
 }
 
 export class Detail implements Controller {
   constructor() {
-    controller = this
+    controller = this;
   }
   init() {
-    return this.render()
+    return this.render();
   }
   render() {
-    return 'detail'
+    return "detail";
   }
 }
 
 export class NotFound implements Controller {
   constructor() {
-    controller = this
+    controller = this;
   }
   init() {
-    return this.render()
+    return this.render();
   }
   render() {
-    return 'not found'
+    return "not found";
   }
 }
 
 export class Restore implements Controller {
-  KeepAlive: boolean
-  count: number
+  KeepAlive: boolean;
+  count: number;
   constructor() {
-    controller = this
-    this.KeepAlive = true
-    this.count = 0
+    controller = this;
+    this.KeepAlive = true;
+    this.count = 0;
   }
   init() {
-    return this.render()
+    return this.render();
   }
   restore() {
-    this.count += 1
-    controller = this
-    return this.render()
+    this.count += 1;
+    controller = this;
+    return this.render();
   }
   render() {
-    return 'restore'
+    return "restore";
   }
 }
